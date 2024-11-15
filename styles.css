@@ -1,0 +1,158 @@
+/* Full-screen background and centering */
+body {
+    margin: 0;
+    overflow-y: auto; /* Enable vertical scrolling */
+    display: flex;
+    align-items: flex-start; /* Adjust alignment to prevent snapping to bottom */
+    justify-content: center;
+    min-height: 100vh; /* Allow page to expand vertically */
+    position: relative; /* For the :before element layering */
+    flex-direction: column; /* Allow stacking of main content */
+    padding-bottom: 20px; /* Prevent content from hitting the edge on smaller screens */
+}
+
+/* Animated background on body:before */
+body:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Ensures background is behind all other content */
+    background: linear-gradient(45deg, #d2001a, #7462ff, #f48e21, #23d5ab);
+    background-size: 400% 400%;
+    animation: colour 12s ease-in-out infinite;
+}
+
+/* Keyframes for background color animation */
+@keyframes colour {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+#mall-container {
+    position: relative;
+    width: 300px;
+    height: 400px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-end;
+}
+
+/* Silver bricks style */
+.brick {
+    width: 50px;
+    height: 25px;
+    background-color: #C0C0C0; /* Silver color */
+    margin: 2px;
+    opacity: 0;
+    animation: fall 2.5s ease forwards;
+}
+
+/* Fall animation for each brick */
+@keyframes fall {
+    0% {
+        transform: translateY(-500px);
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Different animation delay for each brick for staggered fall effect */
+.brick:nth-child(1) { animation-delay: 0.1s; }
+.brick:nth-child(2) { animation-delay: 0.2s; }
+.brick:nth-child(3) { animation-delay: 0.3s; }
+.brick:nth-child(4) { animation-delay: 0.4s; }
+.brick:nth-child(5) { animation-delay: 0.5s; }
+.brick:nth-child(6) { animation-delay: 0.6s; }
+.brick:nth-child(7) { animation-delay: 0.7s; }
+.brick:nth-child(8) { animation-delay: 0.8s; }
+.brick:nth-child(9) { animation-delay: 0.9s; }
+.brick:nth-child(10) { animation-delay: 1.0s; }
+.brick:nth-child(11) { animation-delay: 1.1s; }
+.brick:nth-child(12) { animation-delay: 1.2s; }
+/* Continue with delays if you have more bricks */
+
+#mall-sign {
+    position: absolute;
+    top: -50px;
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    font-family: Arial, sans-serif;
+    color: #333;
+    font-weight: bold;
+    opacity: 0;
+    animation: fadeIn 2s ease forwards 3s; /* Delays sign until bricks are in place */
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* Style for the option icon (hamburger menu) */
+.option-icon {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #333;  /* Dark background for the icon */
+    color: white;
+    padding: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    z-index: 100;
+    transition: background-color 0.3s ease;
+}
+
+.option-icon:hover {
+    background-color: #555;  /* Change color on hover */
+}
+
+/* Dropdown menu styles */
+.dropdown-menu {
+    display: none;
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    background-color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 200px;
+    z-index: 100;
+    transition: opacity 0.3s ease;
+}
+
+.dropdown-menu a {
+    padding: 10px;
+    display: block;
+    color: #333;  /* Default text color */
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f0f0f0;  /* Background color change on hover */
+}
+
+.dropdown-menu.show {
+    display: block;
+    opacity: 1;
+}
+

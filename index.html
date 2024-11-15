@@ -1,0 +1,249 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emall - Multi-Purpose Mall</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Ensure the page is scrollable */
+    html, body {
+      height: 100%;
+      margin: 0;
+      overflow-y: auto;
+    }
+
+    /* Main content area should take up the full viewport height */
+    .main-content {
+      overflow-y: auto;
+      min-height: 100vh;
+    }
+
+    /* Ensure each section takes up space when shown */
+    section {
+      display: none; /* Start hidden */
+      padding: 20px;
+    }
+
+    /* Active section should be displayed */
+    section.active {
+      display: block;
+    }
+
+    /* Style for the option icon (hamburger menu) */
+    .option-icon {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #333;
+      color: white;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+      z-index: 100;
+    }
+
+    /* Dropdown menu styles */
+    .dropdown-menu {
+      display: none;
+      position: fixed;
+      top: 60px;
+      right: 20px;
+      background-color: white;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      width: 200px;
+      z-index: 100;
+    }
+
+    .dropdown-menu a {
+      padding: 10px;
+      display: block;
+      color: #333;
+      text-decoration: none;
+    }
+
+    .dropdown-menu a:hover {
+      background-color: #f0f0f0;
+    }
+
+    .dropdown-menu.show {
+      display: block;
+    }
+
+    /* Style for store logos */
+    .store-logos {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .store-logos a {
+      width: 120px;
+    }
+
+    .store-logos img {
+      max-width: 100%;
+      height: auto;
+    }
+
+  </style>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcTYyykgH_r6s-z_zUJNM61x8BtTh6Nw0&libraries=places"></script>
+  <script defer src="script.js"></script>
+  <script>
+    // JavaScript to switch between sections
+    function showPage(pageId) {
+      document.querySelectorAll('section').forEach(section => {
+        section.classList.remove('active'); // Hide all sections
+      });
+      document.getElementById(`${pageId}-page`).classList.add('active'); // Show selected section
+      window.scrollTo(0, 0); // Reset scroll to top when switching
+    }
+
+    // Toggle the dropdown menu
+    function toggleMenu() {
+      document.querySelector('.dropdown-menu').classList.toggle('show');
+    }
+  </script>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="#" class="logo">Emall</a>
+      <ul class="nav-links">
+        <li><a href="#" onclick="showPage('mall')">Mall</a></li>
+        <li><a href="#" onclick="showPage('refreshments')">Refreshments</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Option Icon (hamburger menu) -->
+  <div class="option-icon" onclick="toggleMenu()">☰</div>
+
+  <!-- Dropdown Menu -->
+  <div class="dropdown-menu">
+    <a href="#" onclick="showPage('refill')">Refill</a>
+    <a href="#" onclick="showPage('rest')">Rest</a>
+    <a href="#" onclick="showPage('safety')">Safety</a>
+  </div>
+
+  <main class="main-content">
+    <!-- Mall Page -->
+    <section id="mall-page" class="active"> <!-- Set to active by default -->
+      <div class="container">
+        <h1>Welcome to Emall</h1>
+        <p>
+          Welcome to Emall, your all-in-one destination for convenient shopping, refueling, dining, rest, and safety. Emall was created to make your everyday needs easily accessible in one seamless platform. Browse and shop from a variety of popular retailers like Shoprite, Pick n Pay, Woolworths, and more, all from one convenient place.
+        </p>
+        
+        <!-- Store Logos -->
+        <div class="store-logos">
+          <a href="https://bigsave.co.za/" target="blank" rel="noopener noreferrer">
+            <img src="images/bigsave-logo.png" alt="bigsave">
+          </a>
+          <a href="https://www.shoprite.co.za" target="_blank" rel="noopener noreferrer">
+            <img src="images/shoprite-logo.png" alt="Shoprite">
+          </a>
+          <a href="https://www.pepstores.com/" target="_blank" rel="noopener noreferrer">
+            <img src="images/pep-logo.png" alt="PEP">
+          </a>
+          <a href="https://www.checkers.co.za/" target="_blank" rel="noopener noreferrer">
+            <img src="images/checkers-logo.png" alt="Checkers">
+          </a>
+          <a href="https://www.kfc.co.za/" target="_blank" rel="noopener noreferrer">
+            <img src="images/kfc-logo.png" alt="KFC">
+          </a>
+          <a href="https://www.mcdonalds.co.za/" target="_blank" rel="noopener noreferrer">
+            <img src="images/mcdonalds-logo.png" alt="McDonald's">
+          </a>
+          <a href="https://www.picknpay.co.za/" target="_blank" rel="noopener noreferrer">
+            <img src="images/picknpay-logo.png" alt="Pick n Pay">
+          </a>
+          <a href="https://www.spar.co.za/" target="_blank" rel="noopener noreferrer">
+            <img src="images/spar-logo.png" alt="Spar">
+          </a>
+          <a href="https://www.mrp.com/" target="_blank" rel="noopener noreferrer">
+            <img src="images/mrprice-logo.png" alt="Mr Price">
+          </a>
+          <a href="https://www.woolworths.co.za/" target="_blank" rel="noopener noreferrer">
+            <img src="images/woolworths-logo.png" alt="Woolworths">
+          </a>
+          <a href="https://www.boxer.co.za/" target="_blank" rel="noopener noreferrer">
+            <img src="images/boxer-logo.png" alt="Boxer">
+          </a>
+          <a href="https://www.game.co.za/" target="_blank" rel="noopener noreferrer">
+            <img src="images/game-logo.png" alt="Game Stores">
+          </a>
+          <a href="https://www.makro.co.za/" target="_blank" rel="noopener noreferrer">
+            <img src="images/makro-logo.png" alt="Makro">
+          </a>
+          <a href="https://www.lewisgroup.co.za/" target="_blank" rel="noopener noreferrer">
+            <img src="images/lewis-logo.png" alt="Lewis">
+            </a>
+            <a href="https://obcgroup.co.za/" target="_blank" rel="noopener noreferrer">
+              <img src="images/obcgroup-logo.png" alt="obc">
+            </a>
+            <a href="https://www.cambridgefood.co.za" target="blank" rel="noopener noreferrer">
+              <img src="images/cambridgefood-logo.png" alt="cambridgefood">
+            </a>
+            <a href="https://steers.co.za" target="blank" rel="noopener noreferrer">
+              <img src="images/steers-logo.png" alt="steers">
+            </a>
+            <a href="https://debonairspizza.co.za" target="blank" rel="noopener noreferrer">
+              <img src="images/debonairs-logo.png" alt="debonairspizza">
+            </a>
+            <a href="https://www.okfoods.co.za" target="blank" rel="noopener noreferrer">
+              <img src="images/ok-logo.png" alt="ok">
+           </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Additional Sections -->
+    <section id="refill-page">
+      <div class="container">
+        <h2>Refill</h2>
+        <p>Find the nearest gas stations.</p>
+        <div id="refill-map" class="map-container"></div>
+      </div>
+    </section>
+
+    <section id="refreshments-page">
+      <div class="container">
+        <h2>Refreshments</h2>
+        <p>Find nearby cafes and restaurants.</p>
+        <div id="refreshments-map" class="map-container"></div>
+      </div>
+    </section>
+
+    <section id="rest-page">
+      <div class="container">
+        <h2>Rest</h2>
+        <p>Find nearby hotels and lodging options.</p>
+        <div id="rest-map" class="map-container"></div>
+      </div>
+    </section>
+
+    <section id="safety-page">
+      <div class="container">
+        <h2>Safety</h2>
+        <p>Locate nearby hospitals and police stations.</p>
+        <div id="safety-map" class="map-container"></div>
+      </div>
+    </section>
+  </main>
+  
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024 Emall. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
+
+
+
+
