@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revest - Capitec Investment Game</title>
+    <style>
+        :root {
+            --primary: #005a9c;
+            --secondary: #ff6200;
+            --light-bg: #f0f2f5;
+            --white: #ffffff;
+            --success: #28a745;
+            --border: #ddd;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light-bg);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            color: var(--primary);
+            margin: 20px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        @media (min-width: 768px) {
+            .container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .balance-card {
+            background: linear-gradient(135deg, var(--primary), #003b6b);
+            color: white;
+            text-align: center;
+        }
+        
+        .balance-amount {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .investment-option {
+            margin-bottom: 15px;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .investment-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .investment-option.selected {
+            border-color: var(--primary);
+            background-color: rgba(0, 90, 156, 0.05);
+        }
+        
+        .investment-name {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .investment-desc {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .investment-details {
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            width: 100%;
+        }
+        
+        button:hover {
+            background: #004680;
+        }
+        
+        .investment-item {
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background: var(--white);
+        }
+        
+        .investment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .investment-title {
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .investment-amount {
+            font-weight: bold;
+        }
+        
+        .investment-details-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: var(--success);
+            border-radius: 4px;
+        }
+        
+        .returns {
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        .timer {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.2rem;
+        }
+        
+        .time-unit {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 10px;
+            background: var(--white);
+            border-radius: 8px;
+            min-width: 80px;
+        }
+        
+        .time-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .time-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .info-icon {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            line-height: 18px;
+            text-align: center;
+            background: #ddd;
+            color: #666;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            margin-left: 5px;
+            cursor: help;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Revest - Capitec Investment Game</h1>
+        <p>Practice investing with Capitec's savings products and watch your money grow!</p>
+    </header>
+    
+    <div class="container">
+        <div>
+            <div class="card balance-card">
+                <h2>Available Balance</h2>
+                <div class="balance-amount" id="balance">ZAR 50,000.00</div>
+                <p>Start investing to grow your money!</p>
+            </div>
+            
+            <div class="card">
+                <h2>Investment Options</h2>
+                
+                <div class="investment-option" onclick="selectInvestment('fixed')">
+                    <div class="investment-name">Fixed-Term Savings</div>
+                    <div class="investment-desc">Higher returns for locking your money away for a fixed period</div>
+                    <div class="investment-details" id="fixed-details">
+                        <p><strong>Term:</strong> 6 to 60 months</p>
+                        <p><strong>Min deposit:</strong> R10,000</p>
+                        <p><strong>Returns:</strong> Up to 9.22% effective</p>
+                    </div>
+                </div>
+                
+                <div class="investment-option" onclick="selectInvestment('notice')">
+                    <div class="investment-name">Notice Deposit Accounts</div>
+                    <div class="investment-desc">Flexibility with decent returns when you give notice</div>
+                    <div class="investment-details" id="notice-details">
+                        <p><strong>Options:</strong> 7-day or 32-day notice</p>
+                        <p><strong>Min deposit:</strong> R250,000</p>
+                        <p><strong>Returns:</strong> Up to 8.03% effective</p>
+                    </div>
+                </div>
+                
+                <div class="investment-option" onclick="selectInvestment('tfsa')">
+                    <div class="investment-name">Tax-Free Savings Account</div>
+                    <div class="investment-desc">Grow your money tax-free with annual and lifetime limits</div>
+                    <div class="investment-details" id="tfsa-details">
+                        <p><strong>Annual limit:</strong> R36,000</p>
+                        <p><strong>Lifetime limit:</strong> R500,000</p>
+                        <p><strong>Returns:</strong> Up to 5.36%</p>
+                    </div>
+                </div>
+                
+                <div class="investment-option" onclick="selectInvestment('flexible')">
+                    <div class="investment-name">Flexible Savings Plans</div>
+                    <div class="investment-desc">Easy access with low risk and modest returns</div>
+                    <div class="investment-details" id="flexible-details">
+                        <p><strong>Access:</strong> Anytime</p>
+                        <p><strong>Min deposit:</strong> R1</p>
+                        <p><strong>Returns:</strong> Up to 2.50%</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Investment Details</h2>
+                <div id="investment-form">
+                    <p>Select an investment option to see details and make an investment.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <div class="card">
+                <h2>Your Investments</h2>
+                <div id="user-investments">
+                    <p>You haven't made any investments yet.</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Simulation Timeline</h2>
+                <div class="timer">
+                    <div class="time-unit">
+                        <div class="time-value" id="years">0</div>
+                        <div class="time-label">Years</div>
+                    </div>
+                    <div class="time-unit">
+                        <div class="time-value" id="months">0</div>
+                        <div class="time-label">Months</div>
+                    </div>
+                </div>
+                <p>Each real-world minute equals 1 month in simulation time.</p>
+                <button onclick="pauseResumeSimulation()" id="pause-btn">Pause Simulation</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // User data
+        let userBalance = 50000;
+        let userInvestments = [];
+        let simulationRunning = true;
+        let simulationInterval;
+        let simulationMonths = 0;
+        
+        // Investment products with detailed information
+        const investments = {
+            fixed: {
+                name: "Fixed-Term Savings",
+                description: "Lock your money away for a fixed period to earn higher interest rates",
+                minAmount: 10000,
+                maxAmount: 20000000,
+                minTerm: 6,
+                maxTerm: 60,
+                getRate: function(amount, term) {
+                    if (amount < 25000) {
+                        // Small amounts (R10,000–R24,999)
+                        if (term <= 6) return 4.08;
+                        if (term <= 12) return 5.00;
+                        if (term <= 24) return 6.00;
+                        if (term <= 36) return 6.75;
+                        if (term <= 48) return 7.20;
+                        return 7.51; // 49-60 months
+                    } else if (amount < 100000) {
+                        // Medium amounts (R25,000–R99,999)
+                        if (term <= 6) return 4.50;
+                        if (term <= 12) return 5.50;
+                        if (term <= 24) return 6.50;
+                        if (term <= 36) return 7.00;
+                        if (term <= 48) return 7.40;
+                        return 7.70; // 49-60 months
+                    } else {
+                        // Large amounts (R100,000+)
+                        if (term <= 6) return 5.50;
+                        if (term <= 12) return 6.25;
+                        if (term <= 24) return 7.00;
+                        if (term <= 36) return 7.40;
+                        if (term <= 48) return 7.60;
+                        if (amount >= 1000000) return 9.22; // R1 million+ for 60 months
+                        return 7.71; // 49-60 months
+                    }
+                }
+            },
+            notice: {
+                name: "Notice Deposit Accounts",
+                description: "Choose between 7-day or 32-day notice periods for higher returns with some flexibility",
+                minAmount: 250000,
+                maxAmount: 10000000,
+                getRate: function(noticeType) {
+                    return noticeType === '7-day' ? 7.50 : 8.03;
+                }
+            },
+            tfsa: {
+                name: "Tax-Free Savings Account",
+                description: "Grow your money tax-free with annual and lifetime contribution limits",
+                minAmount: 1,
+                maxAmount: 36000, // Annual limit
+                lifetimeLimit: 500000,
+                getRate: function(amount, term) {
+                    // Rate increases with longer terms and larger amounts
+                    let baseRate = 3.0;
+                    if (term >= 24) baseRate += 1.0;
+                    if (amount > 20000) baseRate += 0.5;
+                    return Math.min(5.36, baseRate);
+                }
+            },
+            flexible: {
+                name: "Flexible Savings Plans",
+                description: "Easy access to your money with low risk and modest returns",
+                minAmount: 1,
+                maxAmount: 1000000,
+                getRate: function(amount) {
+                    return amount < 100000 ? 2.25 : 2.50;
+                }
+            }
+        };
+        
+        // Initialize the application
+        function init() {
+            updateBalanceDisplay();
+            loadFromLocalStorage();
+            renderInvestmentList();
+            startSimulation();
+        }
+        
+        // Select an investment option
+        function selectInvestment(type) {
+            // Remove selected class from all options
+            document.querySelectorAll('.investment-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            event.currentTarget.classList.add('selected');
+            
+            // Show details for selected investment
+            document.querySelectorAll('.investment-details').forEach(detail => {
+                detail.style.display = 'none';
+            });
+            document.getElementById(`${type}-details`).style.display = 'block';
+            
+            // Generate form for selected investment
+            generateInvestmentForm(type);
+        }
+        
+        // Generate form based on selected investment type
+        function generateInvestmentForm(type) {
+            const investment = investments[type];
+            let formHTML = `
+                <div class="form-group">
+                    <label for="amount">Investment Amount (ZAR)</label>
+                    <input type="number" id="amount" min="${investment.minAmount}" max="${investment.maxAmount}" step="100" placeholder="Enter amount">
+                </div>
+            `;
+            
+            if (type === 'fixed') {
+                formHTML += `
+                    <div class="form-group">
+                        <label for="term">Investment Term (months)</label>
+                        <input type="number" id="term" min="${investment.minTerm}" max="${investment.maxTerm}" value="12" placeholder="Enter months">
+                    </div>
+                `;
+            } else if (type === 'notice') {
+                formHTML += `
+                    <div class="form-group">
+                        <label for="notice-type">Notice Period</label>
+                        <select id="notice-type">
+                            <option value="7-day">7-Day Notice (7.50% effective)</option>
+                            <option value="32-day">32-Day Notice (8.03% effective)</option>
+                        </select>
+                    </div>
+                `;
+            } else if (type === 'tfsa') {
+                formHTML += `
+                    <div class="form-group">
+                        <label for="term">Investment Term (months) <span class="info-icon" title="Typically 12-24 months">i</span></label>
+                        <input type="number" id="term" min="12" max="60" value="12" placeholder="Enter months">
+                    </div>
+                    <p><small>Note: Annual limit is R36,000, lifetime limit is R500,000</small></p>
+                `;
+            }
+            
+            formHTML += `
+                <div class="form-group">
+                    <button onclick="makeInvestment('${type}')">Invest Now</button>
+                </div>
+            `;
+            
+            document.getElementById('investment-form').innerHTML = formHTML;
+        }
+        
+        // Make a new investment
+        function makeInvestment(type) {
+            const amount = parseFloat(document.getElementById('amount').value);
+            const investment = investments[type];
+            
+            // Validate amount
+            if (isNaN(amount) || amount < investment.minAmount || amount > investment.maxAmount) {
+                alert(`Please enter a valid amount between R${investment.minAmount.toLocaleString()} and R${investment.maxAmount.toLocaleString()}`);
+                return;
+            }
+            
+            // Check if user has enough balance
+            if (amount > userBalance) {
+                alert('Insufficient balance for this investment');
+                return;
+            }
+            
+            // For TFSA, check lifetime contribution limit
+            if (type === 'tfsa') {
+                const totalTfsa = userInvestments
+                    .filter(inv => inv.type === 'tfsa')
+                    .reduce((sum, inv) => sum + inv.amount, 0);
+                
+                if (totalTfsa + amount > investment.lifetimeLimit) {
+                    alert(`This investment would exceed your lifetime TFSA limit of R${investment.lifetimeLimit.toLocaleString()}`);
+                    return;
+                }
+            }
+            
+            // Calculate interest rate based on investment type
+            let rate, term = 0;
+            
+            if (type === 'fixed') {
+                term = parseInt(document.getElementById('term').value);
+                if (term < investment.minTerm || term > investment.maxTerm) {
+                    alert(`Please enter a term between ${investment.minTerm} and ${investment.maxTerm} months`);
+                    return;
+                }
+                rate = investment.getRate(amount, term);
+            } else if (type === 'notice') {
+                const noticeType = document.getElementById('notice-type').value;
+                rate = investment.getRate(noticeType);
+                term = noticeType === '7-day' ? 0 : 0; // Notice accounts don't have fixed terms
+            } else if (type === 'tfsa') {
+                term = parseInt(document.getElementById('term').value);
+                rate = investment.getRate(amount, term);
+            } else if (type === 'flexible') {
+                rate = investment.getRate(amount);
+                term = 0; // No fixed term
+            }
+            
+            // Create investment object
+            const newInvestment = {
+                id: Date.now(),
+                type: type,
+                name: investment.name,
+                amount: amount,
+                currentValue: amount,
+                rate: rate,
+                term: term,
+                startMonth: simulationMonths,
+                matured: false
+            };
+            
+            // Deduct from balance and add to investments
+            userBalance -= amount;
+            userInvestments.push(newInvestment);
+            
+            // Update UI and storage
+            updateBalanceDisplay();
+            renderInvestmentList();
+            saveToLocalStorage();
+            
+            alert(`Successfully invested R${amount.toLocaleString()} in ${investment.name}!`);
+        }
+        
+        // Render the list of user investments
+        function renderInvestmentList() {
+            const container = document.getElementById('user-investments');
+            
+            if (userInvestments.length === 0) {
+                container.innerHTML = '<p>You haven\'t made any investments yet.</p>';
+                return;
+            }
+            
+            let html = '';
+            userInvestments.forEach(inv => {
+                const monthsPassed = simulationMonths - inv.startMonth;
+                let progressPercent = 0;
+                let timeLeft = 'No fixed term';
+                
+                if (inv.term > 0) {
+                    progressPercent = Math.min(100, (monthsPassed / inv.term) * 100);
+                    timeLeft = `${Math.max(0, inv.term - monthsPassed)} months left`;
+                }
+                
+                const returns = inv.currentValue - inv.amount;
+                const returnsPercent = ((returns / inv.amount) * 100).toFixed(2);
+                
+                html += `
+                    <div class="investment-item">
+                        <div class="investment-header">
+                            <div class="investment-title">${inv.name}</div>
+                            <div class="investment-amount">R${inv.currentValue.toLocaleString()}</div>
+                        </div>
+                        <div class="investment-details-row">
+                            <div>Invested: R${inv.amount.toLocaleString()}</div>
+                            <div class="returns">+R${returns.toLocaleString()} (${returnsPercent}%)</div>
+                        </div>
+                        <div class="investment-details-row">
+                            <div>Rate: ${inv.rate}% p.a.</div>
+                            <div>${timeLeft}</div>
+                        </div>
+                        ${inv.term > 0 ? `
+                            <div class="progress-bar">
+                                <div class="progress" style="width: ${progressPercent}%"></div>
+                            </div>
+                        ` : ''}
+                        ${inv.matured ? '<div style="color: var(--success); font-weight: bold;">Matured</div>' : ''}
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        // Update balance display
+        function updateBalanceDisplay() {
+            document.getElementById('balance').textContent = `ZAR ${userBalance.toLocaleString()}`;
+        }
+        
+        // Calculate investment returns
+        function calculateReturns() {
+            userInvestments.forEach(inv => {
+                if (inv.matured) return;
+                
+                // Monthly interest rate
+                const monthlyRate = inv.rate / 100 / 12;
+                
+                // Apply interest
+                inv.currentValue *= (1 + monthlyRate);
+                
+                // Check if fixed-term investment has matured
+                if (inv.term > 0) {
+                    const monthsPassed = simulationMonths - inv.startMonth;
+                    if (monthsPassed >= inv.term) {
+                        inv.matured = true;
+                    }
+                }
+            });
+            
+            renderInvestmentList();
+        }
+        
+        // Start the simulation
+        function startSimulation() {
+            simulationInterval = setInterval(() => {
+                if (simulationRunning) {
+                    simulationMonths++;
+                    calculateReturns();
+                    updateSimulationTimeDisplay();
+                    saveToLocalStorage();
+                }
+            }, 1000); // Update every second for smoother progress bars
+        }
+        
+        // Pause or resume the simulation
+        function pauseResumeSimulation() {
+            simulationRunning = !simulationRunning;
+            document.getElementById('pause-btn').textContent = 
+                simulationRunning ? 'Pause Simulation' : 'Resume Simulation';
+        }
+        
+        // Update simulation time display
+        function updateSimulationTimeDisplay() {
+            const years = Math.floor(simulationMonths / 12);
+            const months = simulationMonths % 12;
+            
+            document.getElementById('years').textContent = years;
+            document.getElementById('months').textContent = months;
+        }
+        
+        // Save data to localStorage
+        function saveToLocalStorage() {
+            localStorage.setItem('userBalance', userBalance);
+            localStorage.setItem('userInvestments', JSON.stringify(userInvestments));
+            localStorage.setItem('simulationMonths', simulationMonths);
+        }
+        
+        // Load data from localStorage
+        function loadFromLocalStorage() {
+            const savedBalance = localStorage.getItem('userBalance');
+            const savedInvestments = localStorage.getItem('userInvestments');
+            const savedMonths = localStorage.getItem('simulationMonths');
+            
+            if (savedBalance) userBalance = parseFloat(savedBalance);
+            if (savedInvestments) userInvestments = JSON.parse(savedInvestments);
+            if (savedMonths) simulationMonths = parseInt(savedMonths);
+            
+            updateSimulationTimeDisplay();
+        }
+        
+        // Initialize the app when page loads
+        window.onload = init;
+    </script>
+</body>
+  </html>
